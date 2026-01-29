@@ -1,5 +1,5 @@
 name: Shattered Pixel Dungeon iOS Build
-on: [workflow_dispatch]  # 仅手动触发，不自动编译更省心
+on: [workflow_dispatch]
 jobs:
   build-ipa:
     runs-on: macos-latest
