@@ -1,0 +1,24 @@
+name: Shattered Pixel Dungeon iOS Build
+on: [workflow_dispatch]  # 仅手动触发，不自动编译更省心
+jobs:
+  build-ipa:
+    runs-on: macos-latest
+    steps:
+      - name: 拉取源码
+        uses: actions/checkout@v4
+      
+      - name: 配置Xcode编译（关闭签名）
+        run: |
+          xcodebuild -project ShatteredPixelDungeon.xcodeproj -scheme ShatteredPixelDungeon -configuration Release -sdk iphoneos CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO ONLY_ACTIVE_ARCH=NO
+      
+      - name: 打包生成IPA
+        run: |
+          mkdir -p Payload
+          cp -r build/Release-iphoneos/ShatteredPixelDungeon.app Payload/
+          zip -qr ShatteredPixelDungeon.ipa Payload/
+      
+      - name: 上传IPA供下载
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-ipa
+          path: ShatteredPixelDungeon.ipa
